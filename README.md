@@ -62,13 +62,15 @@ echo "<script>var user_name = \"`escho-jsstr "$user"`\";</script>"
 echo '<book isbn="9780139376818" title="The Unix Programming Environment" />' | escape-xml
 #=> &lt;book isbn=&quot;9780139376818&quot; title=&quot;The Unix Programming Environment&quot; /&gt;
 
-## RFC-2616 HTTP-date date and time
+## RFC-2616 HTTP-date style date and time
 LANG=C TZ=JST-9 date
 #=> Thu Sep 25 22:30:10 JST 2014
 
+# current date and time
 http-date
 #=> Thu, 25 Sep 2014 13:30:10 GMT
 
+# mtime (modify time) of file
 http-mtime foo.txt
 #=> Thu, 23 Sep 2014 02:37:55 GMT
 ```
