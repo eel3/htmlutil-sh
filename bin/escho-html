@@ -1,5 +1,7 @@
 #!/bin/sh
-# @(#) Echo with HTML escape. Version 1.0.0.20121229
+# -*- coding: utf-8-unix -*-
+# vim:fileencoding=utf-8:ff=unix
+# @(#) Echo with HTML escape.
 # need escape-html, necho
 
 # Copyright (c) 2014 eel3
@@ -23,11 +25,39 @@
 #     3. This notice may not be removed or altered from any source
 #     distribution.
 
+set -u
+umask 0022
+IFS=$(printf ' \t\n_'); IFS=${IFS%_}
+export IFS LC_ALL=C LANG=C
+
+readonly progname=${0##*/}
+readonly version=1.1.0.20190405
+
+# usage <exit-code>
+usage() {
+    echo "usage: $progname [-hv] [-n] [string ...]" 1>&2
+    exit $1
+}
+
+# version (no parameter)
+version() {
+    echo "$progname $version" 1>&2
+    exit 0
+}
+
+# main routine
+
 echocmd=echo
 
-if [ $# -ge 1 -a "$1" = '-n' ]; then
-    echocmd=necho
-    shift
-fi
+opt=
+while getopts 'hnv' opt; do
+    case $opt in
+    h)      usage 0 ;;
+    n)      echocmd=necho ;;
+    v)      version ;;
+    \?)     usage 1 ;;
+    esac
+done
+shift $(($OPTIND - 1))
 
 exec $echocmd ${@+"$@"} | escape-html
