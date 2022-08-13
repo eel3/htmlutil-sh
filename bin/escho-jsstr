@@ -30,13 +30,13 @@ umask 0022
 IFS=$(printf ' \t\n_'); IFS=${IFS%_}
 export IFS LC_ALL=C LANG=C
 
-readonly progname=${0##*/}
-readonly version=1.1.0.20190405
+readonly progname="${0##*/}"
+readonly version=1.1.1.20220710
 
 # usage <exit-code>
 usage() {
     echo "usage: $progname [-hv] [string ...]" 1>&2
-    exit $1
+    exit "$1"
 }
 
 # version (no parameter)
@@ -55,6 +55,6 @@ while getopts 'hv' opt; do
     \?)     usage 1 ;;
     esac
 done
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 exec necho ${@+"$@"} | escape-jsstr

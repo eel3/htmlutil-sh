@@ -30,13 +30,13 @@ IFS=$(printf ' \t\n_'); IFS=${IFS%_}
 PATH=/bin:/usr/bin:/usr/local/bin
 export IFS LC_ALL=C LANG=C PATH
 
-readonly progname=${0##*/}
-readonly version=1.1.0.20190405
+readonly progname="${0##*/}"
+readonly version=1.1.1.20220710
 
 # usage <exit-code>
 usage() {
     echo "usage: $progname [-hv] [file ...]" 1>&2
-    exit $1
+    exit "$1"
 }
 
 # version (no parameter)
@@ -58,11 +58,11 @@ while getopts 'hv' opt; do
     \?)     usage 1 ;;
     esac
 done
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 exec iconv -f UTF-8 -t UTF-16BE ${@+"$@"} |
     od -A n -t x1 -v |
-    tr '[a-z]' '[A-Z]' |
+    tr '[:lower:]' '[:upper:]' |
     sed "s/\\($SPC$HEX2\\)$SPC\\($HEX2\\)/\\1\\2/g
          s/$SPC/\\\\u/g" |
     tr -d '\n'
